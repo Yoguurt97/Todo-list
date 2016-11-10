@@ -6,15 +6,13 @@ from ctypes  import *
 # TODO Один файл в неделю/месяц
 # TODO Доработка GUI, сделать более приятный дизайн, добавить оповещение о добавленной задачи, убрать {} в задачах на сегодня.
 
-width = windll.user32.GetSystemMetrics(0)
-height = windll.user32.GetSystemMetrics(1)
-width = (width / 2) / 2 - 50
-height = (height / 2) / 2 - 50
+width = windll.user32.GetSystemMetrics(0) / 4 - 50
+height = windll.user32.GetSystemMetrics(1) / 4 - 50
 width = int(width)
 height = int(height)
 
 root = Tk()
-root.geometry('700x500+' + str(width) + '+' + str(height))
+root.geometry('700x500+{0}+{1}'.format(width, height))
 root.title('Todo list')
 root['bg'] = 'white'
 
@@ -36,11 +34,11 @@ def task_today(today, list_tasks, root):
             for line in f_read:
                 i = str(i)
                 print(i + '. ' + line)
-                tasks = i + '. ' + line
-                list_tasks.append(tasks)
+                task = i + '. ' + line
+                list_tasks.append(task)
                 i = int(i)
                 i += 1
-                lab = Label(root, font='Airal 12', bg='white', text=list_tasks)
+                lab = Label(root, font='Airal 12', bg='white', text=task)
                 lab.pack()
         new_task(today, width, height)
     except FileNotFoundError:
@@ -62,7 +60,7 @@ def new_task(today, width, height):
             with open('tasks\\' + tommorow + '.txt', 'a', encoding='UTF-8') as f:
                 f.write(task)
         task_add = Tk()
-        task_add.geometry('100x100+' + str(width) + '+' + str(height))
+        task_add.geometry('100x100+{0}+{1}'.format(width, height))
         task_add.title('Ok')
         added = Label(task_add, text='Задача добавлена')
         ok_added = Button(task_add, text='Оk', command=task_add.destroy)
