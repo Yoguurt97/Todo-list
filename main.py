@@ -19,16 +19,23 @@ root['bg'] = 'white'
 
 def m_delete_task():
     win_delete = Tk()
-    win_delete.geometry('200x80+{0}+{1}'.format(int(width), int(height)))
-    area = Label(win_delete, text='123')
+    win_delete.geometry('300x120+{0}+{1}'.format(int(width), int(height)))
+    area = Label(win_delete, text='Введите дату задачи, \nкоторую хотите удалить(ГГГГ.ММ.Д)\n')
     value = Entry(win_delete)
     def delete_task():
-        date_task = value.get()
         try:
-            with open('tasks\\{}.txt'.format(date_task), 'r') as f:
-                print('Задача удалена')
-        except:
-            pass
+            date_task = value.get()
+            name_file = value.get()
+            os.remove('tasks\\{}'.format(name_file))
+            value.delete('0', END)
+        except FileNotFoundError:
+            value.delete('0', END)
+    def delete_all_task():
+        listdir = os.listdir('tasks\\')
+        for file in listdir:
+            os.remove('tasks\\' + file)
+        value.delete('0', END)
+    btn_delete_all = Button(win_delete, text='Удалить все задачи', command=delete_all_task).pack(side='bottom')
     btn_delete = Button(win_delete, text='Удалить задачу', command=delete_task).pack(side='bottom')
     value.pack(side='bottom')
     area.pack(side='top')
