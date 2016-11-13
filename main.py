@@ -7,6 +7,19 @@ from ctypes  import *
 # TODO Доработка GUI, сделать более приятный дизайн.
 # TODO Дописать удаление задач, инфу о программе(версия, хелпа)
 
+class Help():
+    def about(self):
+        root = Tk()
+        root.title('About')
+        root.geometry('700x500+{0}+{1}'.format(int(width), int(height)))
+        with open('LICENSE.txt', 'r') as f:
+            lic = f.read()
+            print(lic)
+            Label(root, text=lic).pack()
+        root.mainloop()
+
+help = Help()
+
 # Получение разешения экрана пользователя
 width = windll.user32.GetSystemMetrics(0) / 4 - 50
 height = windll.user32.GetSystemMetrics(1) / 4 - 50
@@ -15,7 +28,6 @@ root = Tk()
 root.geometry('700x500+{0}+{1}'.format(int(width), int(height)))
 root.title('Todo list')
 root['bg'] = 'white'
-
 
 def m_delete_task():
     win_delete = Tk()
@@ -48,10 +60,10 @@ fm = Menu(m)
 m.add_cascade(label="Fie", menu=fm)
 fm.add_command(label="Delete task", command=m_delete_task)
 fm.add_command(label="Exit", command=root.destroy)
+
 hm = Menu(m)
 m.add_cascade(label="Help", menu=hm)
-hm.add_command(label="Help")
-hm.add_command(label="About")
+hm.add_command(label="About", command=help.about)
 # Получение даты этого и следующего дня
 date = datetime.today()
 today = '{0}.{1}.{2}'.format(date.year, date.month, date.day )
