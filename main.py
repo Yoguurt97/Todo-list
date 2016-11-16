@@ -77,6 +77,7 @@ def task_today(today, root):
                 i = int(i) + 1
                 lab = Label(root, font='Airal 12', bg='white', text=task)
                 lab.pack()
+            tmr_btn = Button(root, text='Задачи на завтра', command=buttons.tmr_tasks).place(y=250, x=190)
         new_task(today, width, height)
     except FileNotFoundError:
         lab = Label(root, font='Airal 14', bg='white', text='Задач на сегодня нет\n\n')
