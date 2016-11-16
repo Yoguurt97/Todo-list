@@ -7,10 +7,12 @@ from ctypes  import *
 # TODO Доработка GUI
 
 class buttons():
+    def tmr_tasks(self):
+        pass
     def about(self):
         root = Tk()
         root.title('About')
-        root.geometry('700x500+{0}+{1}'.format(int(width), int(height)))
+        root.geometry('600x400+{0}+{1}'.format(int(width), int(height)))
         with open('LICENSE.txt', 'r') as f:
             lic = f.read()
             print(lic)
@@ -49,7 +51,7 @@ height = windll.user32.GetSystemMetrics(1) / 4 - 50
 # Создание окна
 root = Tk()
 root.resizable(width=False, height=False)
-root.geometry('700x500+{0}+{1}'.format(int(width), int(height)))
+root.geometry('500x300+{0}+{1}'.format(int(width), int(height)))
 root.title('Todo list')
 root['bg'] = 'white'
 # Создание топ меню
@@ -67,16 +69,19 @@ def task_today(today, root):
     try:
         i = 1
         with open('tasks\\{}.txt'.format(today), encoding='UTF-8') as f:
+            lab = Label(root, font='Airal 14', bg='white', text='\n\nЗадачи на сегодня: \n')
+            lab.pack()
             f_read = f.readlines()
             for line in f_read:
                 task = str(i) + '. ' + line
                 i = int(i) + 1
                 lab = Label(root, font='Airal 12', bg='white', text=task)
-                lab.place()
+                lab.pack()
         new_task(today, width, height)
     except FileNotFoundError:
-        lab = Label(root, font='Airal 14', text='Задач на сегодня нет\n\n')
-        lab.place(y=50, x=10)
+        lab = Label(root, font='Airal 14', bg='white', text='Задач на сегодня нет\n\n')
+        lab.place(y=50, x=150)
+        tmr_btn = Button(root, text='Задачи на завтра', command=buttons.tmr_tasks).place(y=90, x=190)
         new_task(today, width, height)
 # Новая задача
 def new_task(today, width, height):
@@ -84,7 +89,7 @@ def new_task(today, width, height):
     text_task.place(x=0)
     def add_task():
         task = text_task.get()
-        if task == '\n':
+        if task == '':
             error_win = Tk()
             error_win.geometry('100x100+{0}+{1}'.format(int(width), int(height)))
             error_win.title('Ошибка')
@@ -112,7 +117,7 @@ def new_task(today, width, height):
             added.pack()
             task_add.mainloop()
     btn = Button(root, text='Добавить задачу', command=add_task)
-    btn.place(x=600)
+    btn.place(x=400)
     root.mainloop()
 
 if __name__ == '__main__':
