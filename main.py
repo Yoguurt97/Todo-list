@@ -3,6 +3,9 @@ from datetime import datetime
 from tkinter import *
 from ctypes  import *
 
+author = "Ilya Ganyushkin"
+version = "0.16"
+
 # TODO Один файл в неделю/месяц
 # TODO Доработка GUI
 
@@ -11,9 +14,19 @@ class buttons():
         root = Tk()
         root.geometry('500x300+{0}+{1}'.format(int(width), int(height)))
         root.title('Задачи на завтра')
+        root['bg'] = 'white'
         try:
+            i = 1
             with open('tasks\\{}.txt'.format(tommorow), encoding='UTF-8') as f:
-                pass
+                lab = Label(root, font='Airal 14', bg='white', text='\nЗадачи на завтра: \n')
+                lab.pack()
+                f_read = f.readlines()
+                for line in f_read:
+                    task = str(i) + '. ' + line
+                    i = int(i) + 1
+                    lab = Label(root, font='Airal 12', bg='white', text=task)
+                    lab.pack()
+                tmr_btn = Button(root, text='Понял', command=root.destroy).place(y=250, x=230)
         except FileNotFoundError:
             root.geometry('100x40+{0}+{1}'.format(int(width), int(height)))
             btn = Button(root, text='Задач на завтра нет', command=root.destroy).place(x=3)
