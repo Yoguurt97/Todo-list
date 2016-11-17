@@ -8,20 +8,30 @@ from ctypes  import *
 
 class buttons():
     def tmr_tasks(self):
-        pass
+        root = Tk()
+        root.geometry('500x300+{0}+{1}'.format(int(width), int(height)))
+        root.title('Задачи на завтра')
+        try:
+            with open('tasks\\{}.txt'.format(tommorow), encoding='UTF-8') as f:
+                pass
+        except FileNotFoundError:
+            root.geometry('100x40+{0}+{1}'.format(int(width), int(height)))
+            btn = Button(root, text='Задач на завтра нет', command=root.destroy).place(x=3)
+        root.mainloop()
     def about(self):
         root = Tk()
         root.title('About')
         root.geometry('600x400+{0}+{1}'.format(int(width), int(height)))
         with open('LICENSE.txt', 'r') as f:
             lic = f.read()
-            print(lic)
             Label(root, text=lic).pack()
         root.mainloop()
+    def new_task(self):
+        pass
     def delete_tasks(self):
         win_delete = Tk()
         win_delete.geometry('300x120+{0}+{1}'.format(int(width), int(height)))
-        area = Label(win_delete, text='Введите дату задачи, \nкоторую хотите удалить(ГГГГ.ММ.Д)\n')
+        area = Label(win_delete, text='Введите дату задачи, \nкоторые хотите удалить(ГГГГ.ММ.Д)\n')
         value = Entry(win_delete)
         def delete_task():
             try:
@@ -40,30 +50,7 @@ class buttons():
         value.pack(side='bottom')
         area.pack(side='top')
         win_delete.mainloop()
-buttons = buttons()
-# Получение даты этого и следующего дня
-date = datetime.today()
-today = '{0}.{1}.{2}'.format(date.year, date.month, date.day )
-tommorow = '{0}.{1}.{2}'.format(date.year, date.month, date.day + 1)
-# Получение разешения экрана пользователя
-width = windll.user32.GetSystemMetrics(0) / 4 - 50
-height = windll.user32.GetSystemMetrics(1) / 4 - 50
-# Создание окна
-root = Tk()
-root.resizable(width=False, height=False)
-root.geometry('500x300+{0}+{1}'.format(int(width), int(height)))
-root.title('Todo list')
-root['bg'] = 'white'
-# Создание топ меню
-m = Menu(root)
-root.config(menu=m)
-fm = Menu(m)
-m.add_cascade(label="Fie", menu=fm)
-fm.add_command(label="Delete task", command=buttons.delete_tasks)
-fm.add_command(label="Exit", command=root.destroy)
-hm = Menu(m)
-m.add_cascade(label="Help", menu=hm)
-hm.add_command(label="About", command=buttons.about)
+
 # Проверка на задачи
 def task_today(today, root):
     try:
@@ -122,5 +109,30 @@ def new_task(today, width, height):
     root.mainloop()
 
 if __name__ == '__main__':
+    buttons = buttons()
+    # Получение даты этого и следующего дня
+    date = datetime.today()
+    today = '{0}.{1}.{2}'.format(date.year, date.month, date.day)
+    tommorow = '{0}.{1}.{2}'.format(date.year, date.month, date.day + 1)
+    # Получение разешения экрана пользователя
+    width = windll.user32.GetSystemMetrics(0) / 4 - 50
+    height = windll.user32.GetSystemMetrics(1) / 4 - 50
+    # Создание окна
+    root = Tk()
+    root.resizable(width=False, height=False)
+    root.geometry('500x300+{0}+{1}'.format(int(width), int(height)))
+    root.title('Todo list')
+    root['bg'] = 'white'
+    # Создание топ меню
+    m = Menu(root)
+    root.config(menu=m)
+    fm = Menu(m)
+    m.add_cascade(label="Fie", menu=fm)
+    fm.add_command(label="New task", command=buttons.new_task)
+    fm.add_command(label="Delete task", command=buttons.delete_tasks)
+    fm.add_command(label="Exit", command=root.destroy)
+    hm = Menu(m)
+    m.add_cascade(label="Help", menu=hm)
+    hm.add_command(label="About", command=buttons.about)
     task_today(today, root)
     root.mainloop()
