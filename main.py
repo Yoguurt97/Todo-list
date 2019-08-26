@@ -6,8 +6,8 @@ from ctypes  import *
 author = "Ilya Ganyushkin"
 version = "0.16"
 
-# TODO Один файл в неделю/месяц
-# TODO Доработка GUI
+# TODO Дороботка гуи
+# TODO задача на конкретный день
 
 class buttons():
     def tmr_tasks(self):
@@ -30,6 +30,12 @@ class buttons():
         except FileNotFoundError:
             root.geometry('100x40+{0}+{1}'.format(int(width), int(height)))
             btn = Button(root, text='Задач на завтра нет', command=root.destroy).place(x=3)
+        root.mainloop()
+    def other_tasks(self):
+        root = Tk()
+        root.geometry('600x400+{0}+{1}'.format(int(width), int(height)))
+        root.title('Задачи на другой день')
+        root['bg'] = 'white'
         root.mainloop()
     def about(self):
         root = Tk()
@@ -64,7 +70,7 @@ class buttons():
         area.pack(side='top')
         win_delete.mainloop()
 
-# Проверка на задачи
+# Задачи на завтра 
 def task_today(today, root):
     try:
         i = 1
@@ -84,6 +90,12 @@ def task_today(today, root):
         lab.place(y=50, x=150)
         tmr_btn = Button(root, text='Задачи на завтра', command=buttons.tmr_tasks).place(y=90, x=190)
         new_task(today, width, height)
+# Все задачи
+def task_all(root):
+    i = 1
+    with open('task\\{}.txt'.format(today_plus), encoding='UTF-8') as f:
+              pass
+    other_btn = Button(root, text='Задачи на завтра', command=buttons.tmr_tasks).place(y=250, x=190)
 # Новая задача
 def new_task(today, width, height):
     text_task = Entry(root, width=54, font='Arial 14')
@@ -124,8 +136,10 @@ def new_task(today, width, height):
 if __name__ == '__main__':
     buttons = buttons()
     # Получение даты этого и следующего дня
+    w = 0
     date = datetime.today()
     today = '{0}.{1}.{2}'.format(date.year, date.month, date.day)
+    today_plus = '{0}.{1}.{2}'.format(date.year, date.month, date.day + w)
     tommorow = '{0}.{1}.{2}'.format(date.year, date.month, date.day + 1)
     # Получение разешения экрана пользователя
     width = windll.user32.GetSystemMetrics(0) / 4 - 50
@@ -142,6 +156,7 @@ if __name__ == '__main__':
     fm = Menu(m)
     m.add_cascade(label="Fie", menu=fm)
     fm.add_command(label="New task", command=buttons.new_task)
+    fm.add_command(label="Other tasks", command=buttons.other_tasks)
     fm.add_command(label="Delete task", command=buttons.delete_tasks)
     fm.add_command(label="Exit", command=root.destroy)
     hm = Menu(m)
